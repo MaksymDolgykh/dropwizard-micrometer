@@ -10,6 +10,7 @@
     <name>${project.groupId}:${project.artifactId}</name>
 
     <description>Dropwizard bundle to add prometheus micrometer-like metrics</description>
+    <url>https://github.com/MaksymDolgykh/dropwizard-micrometer</url>
 
     <licenses>
         <license>
@@ -18,6 +19,20 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <name>Maksym Dolgykh</name>
+            <organization>GitHub</organization>
+            <organizationUrl>https://github.com/MaksymDolgykh</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/maksymdolgykh/dropwizard-micrometer</url>
+        <connection>scm:git:ssh://git@github.com/myksymdolgykh/dropwizard-micrometer.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/maksymdolgykh/dropwizard-micrometer.git</developerConnection>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,18 +48,12 @@
         <compiler.pluginVersion>3.8.1</compiler.pluginVersion>
         <source.pluginVersion>3.2.1</source.pluginVersion>
         <surefire.pluginVersion>3.0.0-M5</surefire.pluginVersion>
+        <nexus-staging.pluginVersion>1.6.7</nexus-staging.pluginVersion>
         <preparationGoals>clean install</preparationGoals>
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
         <assert4j.version>3.17.1</assert4j.version>
 
     </properties>
-
-    <scm>
-        <url>https://github.com/maksymdolgykh/dropwizard-micrometer</url>
-        <connection>scm:git:ssh://git@github.com/myksymdolgykh/dropwizard-micrometer.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/maksymdolgykh/dropwizard-micrometer.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
 
     <dependencyManagement>
         <dependencies>
@@ -166,7 +175,49 @@
                     <rerunFailingTestsCount>3</rerunFailingTestsCount>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging.pluginVersion}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

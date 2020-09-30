@@ -4,12 +4,13 @@
 
     <groupId>io.github.maksymdolgykh.dropwizard</groupId>
     <artifactId>dropwizard-micrometer</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
 
-    <description>Dropwizard bundle to add prometheus micrometer-like metrics</description>
+    <description>Dropwizard bundle that enables your dropwizard application for exposition of micrometer-like metrics as a prometheus endpoint
+    </description>
     <url>https://github.com/MaksymDolgykh/dropwizard-micrometer</url>
 
     <licenses>

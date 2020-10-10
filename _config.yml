@@ -1,0 +1,7 @@
+version: 1.0.0
+author: Maksym Dolgykh
+description: Dropwizard bundle that enables your dropwizard application for exposition of micrometer-like metrics as a prometheus endpoint
+repository: https://github.com/MaksymDolgykh/dropwizard-micrometer
+google_site_verification: O4U1_nz2en_ImlO-GKIKxGofqKJ9u2us99PohiCouwY
+plugins:
+  - jekyll-sitemap

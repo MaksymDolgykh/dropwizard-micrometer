@@ -2,20 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
+    <parent>
+        <groupId>io.github.maksymdolgykh.dropwizard</groupId>
+        <artifactId>dropwizard-micrometer</artifactId>
+        <version>2.0.5</version>
+    </parent>
+
+
     <groupId>io.github.maksymdolgykh.dropwizard</groupId>
-    <artifactId>dropwizard-micrometer</artifactId>
-    <version>2.0.5</version>
-    <packaging>pom</packaging>
+    <artifactId>dropwizard-micrometer-core</artifactId>
+    <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
 
-    <modules>
-        <module>core</module>
-        <module>jdbi</module>
-    </modules>
-
     <description>
-        Dropwizard bundle that enables your dropwizard application for exposition of dimensional metrics with prometheus endpoint
+        Dropwizard bundle that implements prometheus endpoint and exposes core system metrics and JVM metrics utilizing micrometer instrumentation.
+        Optionally, it provides servlet filter to record HTTP requests latencies and statuses within dimensional prometheus histogram.
     </description>
     <url>https://github.com/MaksymDolgykh/dropwizard-micrometer</url>
 
@@ -41,97 +44,58 @@
         <developerConnection>scm:git:ssh://git@github.com/maksymdolgykh/dropwizard-micrometer.git</developerConnection>
     </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <dependencies>
 
-        <java.source.version>11</java.source.version>
-        <java.target.version>11</java.target.version>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+        </dependency>
 
-        <dropwizard.version>2.0.12</dropwizard.version>
-        <prometheus.version>0.7.0</prometheus.version>
-        <micrometer.version>1.3.12</micrometer.version>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_common</artifactId>
+        </dependency>
 
-        <compiler.pluginVersion>3.8.1</compiler.pluginVersion>
-        <source.pluginVersion>3.2.1</source.pluginVersion>
-        <surefire.pluginVersion>3.0.0-M5</surefire.pluginVersion>
-        <nexus-staging.pluginVersion>1.6.7</nexus-staging.pluginVersion>
-        <preparationGoals>clean install</preparationGoals>
-        <junit.jupiter.version>5.6.2</junit.jupiter.version>
-        <assert4j.version>3.17.1</assert4j.version>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_servlet</artifactId>
+        </dependency>
 
-    </properties>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-bom</artifactId>
-                <version>${dropwizard.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
 
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-core</artifactId>
-                <version>${dropwizard.version}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient_common</artifactId>
-                <version>${prometheus.version}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient_servlet</artifactId>
-                <version>${prometheus.version}</version>
-            </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-testing</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-core</artifactId>
-                <version>${micrometer.version}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-registry-prometheus</artifactId>
-                <version>${micrometer.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-testing</artifactId>
-                <version>${dropwizard.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assert4j.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -214,16 +178,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
 </project>

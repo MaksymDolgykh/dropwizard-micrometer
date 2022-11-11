@@ -12,7 +12,7 @@ jobs:
       - id: release
         uses: google-github-actions/release-please-action@v3
         with:
-          release-type: maven
+          release-type: simple
           changelog-types: >-
             [{"type": "feat", "section": "Features", "hidden": false},
               {"type": "fix", "section": "Bug Fixes", "hidden": false},

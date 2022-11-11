@@ -1,7 +1,8 @@
 # dropwizard-micrometer
 
 [Dropwizard][dropwizard] bundle that enables your dropwizard application for exposition of [micrometer-like][micrometer] 
-metrics (system, jvm and http requests) as a [prometheus][prometheus] endpoint.
+metrics (system, jvm and http requests) as a [prometheus][prometheus] endpoint. In addition, if you use JDBI to manage 
+mapping of objects to database tables, you can utilize [dropwizad-micrometer-jdbi](#dropwizad-micrometer-jdbi) package to meter SQL request's latencies.
 
 ## Packages
 - `dropwizad-micrometer-core`
@@ -19,11 +20,11 @@ Below are the steps explained in more detail specifically for each package.
 
 ### dropwizad-micrometer-core
 This package provides a minimal setup, i.e. it instantiates `/prometheus` endpoint, adds system and JVM metrics utilizing 
-micrometer instrumentation and optionally you can setup servlet filter to record HTTP requests latencies/statuses. 
+micrometer instrumentation, and optionally you can set up servlet filter to record HTTP requests latencies/statuses.
 
 #### Add dependency into your `pom.xml`
 If you use `maven`, you can simply reference it in the `<dependenccies>` block as below. 
-The latest version can be found on in the maven [repository][dropwizard-micrometer-core maven repo]
+The latest version can be found in [Releases](https://github.com/MaksymDolgykh/dropwizard-micrometer/releases) or in the maven [repository][dropwizard-micrometer-core maven repo]
 
 ```xml
     <dependencies>
@@ -145,7 +146,7 @@ This project is licensed under the Apache License 2.0 ([LICENSE](./LICENSE.TXT))
 
 
 [dropwizard]: https://www.dropwizard.io/en/latest/
-[dropwizard example application]: https://github.com/MaksymDolgykh/dropwizard-example-app/tree/v1.0.0
+[dropwizard example application]: https://github.com/MaksymDolgykh/dropwizard-example-app
 [dropwizard-micrometer-core maven repo]: https://mvnrepository.com/artifact/io.github.maksymdolgykh.dropwizard/dropwizard-micrometer-core
 [dropwizard-micrometer-jdbi maven repo]: https://mvnrepository.com/artifact/io.github.maksymdolgykh.dropwizard/dropwizard-micrometer-jdbi
 [jdbi]: https://jdbi.org/

@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test-pr:
+    if: ${{ !contains(github.head_ref, 'release-please') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install commitlint
+        run: npm install -g @commitlint/{cli,config-conventional};
+
+      - name: Run commitlint
+        run: commitlint -x $(npm root -g)/@commitlint/config-conventional --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 11
+
+      - name: Run Unit tests
+        run: mvn clean test

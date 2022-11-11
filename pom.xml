@@ -130,23 +130,28 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.pluginVersion}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler.pluginVersion}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.pluginVersion}</version>
                 <configuration>
-                    <fork>true</fork>
-                    <compilerArguments>
-                        <parameters />
-                    </compilerArguments>
-                    <source>${java.source.version}</source>
-                    <target>${java.target.version}</target>
+                    <failIfNoTests>true</failIfNoTests>
+                    <rerunFailingTestsCount>3</rerunFailingTestsCount>
                 </configuration>
             </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -172,14 +177,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.pluginVersion}</version>
-                <configuration>
-                    <failIfNoTests>true</failIfNoTests>
-                    <rerunFailingTestsCount>3</rerunFailingTestsCount>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>

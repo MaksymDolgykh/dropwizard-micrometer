@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.5 (2021-01-31)
+## [2.0.5](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v1.0.0...v2.0.5) (2021-01-31)
 
 
 ### Features

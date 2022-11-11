@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.6](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v2.0.5...v2.0.6) (2022-11-11)
+
+
+### Continuous Integration
+
+* add release workflow ([8d4a19d](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/8d4a19db0de8fb44f3af8ff71609ea6d7dc14f5f))
+* add test-pr workflow ([5d49eda](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/5d49edaec145e554ddc50e08b280bee33e14fe7b))
+
+
+### Documentation
+
+* update docs ([1b8b1f0](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/1b8b1f0c0a6de3817c3560d70384b2f8931a8fb7))
+
+
+### Miscellaneous Chores
+
+* **master:** release 2.0.6-SNAPSHOT ([ee64a7b](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/ee64a7b40a3a246f5b54f2050e7b2236b0a574dc))
+* release 2.0.6 ([89a5230](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/89a52301b75a78c750291feddc727cf6c8fe4223))
+
 ## [2.0.5](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v1.0.0...v2.0.5) (2021-01-31)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.8](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v2.0.7...v2.0.8) (2022-11-11)
+
+
+### Miscellaneous Chores
+
+* **master:** release 2.0.8-SNAPSHOT ([2927ddc](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/2927ddc7e045f7a0e8d5b2b20d2d779f292e12bc))
+
 ## [2.0.7](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v2.0.6...v2.0.7) (2022-11-11)
 
 

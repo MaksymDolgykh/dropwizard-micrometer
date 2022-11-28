@@ -133,6 +133,13 @@ public class MicrometerBundleTest {
     }
 
     @Test
+    public void testProcessFilesMetrics() {
+        Assertions.assertThat(scrape)
+                .isNotNull()
+                .contains("process_files");
+    }
+
+    @Test
     public void testHttpLatencyMetrics() {
         Assertions.assertThat(scrape)
                 .isNotNull()

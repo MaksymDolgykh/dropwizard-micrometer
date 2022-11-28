@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmHeapPressureMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
+import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
 import io.micrometer.core.instrument.binder.system.UptimeMetrics;
 import io.micrometer.core.instrument.binder.logging.LogbackMetrics;
@@ -50,11 +52,13 @@ public class MicrometerBundle implements ConfiguredBundle<Configuration> {
         new ClassLoaderMetrics().bindTo(prometheusRegistry);
         new JvmMemoryMetrics().bindTo(prometheusRegistry);
         new JvmGcMetrics().bindTo(prometheusRegistry);
+        new JvmHeapPressureMetrics().bindTo(prometheusRegistry);
         new JvmThreadMetrics().bindTo(prometheusRegistry);
         new UptimeMetrics().bindTo(prometheusRegistry);
         new ProcessorMetrics().bindTo(prometheusRegistry);
         new LogbackMetrics().bindTo(prometheusRegistry);
-        
+        new FileDescriptorMetrics().bindTo(prometheusRegistry);
+
         MetricsServlet servlet = new MetricsServlet(prometheusRegistry.getPrometheusRegistry());
 
         LOGGER.info("Adding prometheus scraping endpoint as a servlet mapped to: {}", endpoint);

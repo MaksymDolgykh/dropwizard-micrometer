@@ -7,6 +7,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.Configuration;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
 import org.assertj.core.api.Assertions;
@@ -14,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.junit5.DropwizardAppExtension;
@@ -39,7 +40,7 @@ public class MicrometerBundleTest {
         return socket.getLocalPort();
     }
 
-    public static final DropwizardAppExtension EXT = new DropwizardAppExtension(TestApp.class,
+    public static final DropwizardAppExtension<TestConfiguration> EXT = new DropwizardAppExtension<TestConfiguration>(TestApp.class,
             ResourceHelpers.resourceFilePath("testConfig.yaml"),
             ConfigOverride.config("server.applicationConnectors[0].port", String.valueOf(getFreePort())),
             ConfigOverride.config("server.adminConnectors[0].port", String.valueOf(getFreePort())));
@@ -48,10 +49,12 @@ public class MicrometerBundleTest {
     int appPort = EXT.getLocalPort();
     Client client = EXT.client();
 
+    PrometheusConfiguration prometheusConfiguration = EXT.getConfiguration().getPrometheusConfiguration();
+
     String ping = client.target("http://localhost:" + appPort + "/ping")
             .request().get(String.class);
 
-    String scrape = client.target("http://localhost:"+ adminPort +"/prometheus")
+    String scrape = client.target("http://localhost:"+ adminPort + prometheusConfiguration.getEndpoint())
             .request().get(String.class);
     
 
@@ -153,9 +156,20 @@ public class MicrometerBundleTest {
                 .matches("(?s).*http_server_requests_seconds_bucket.*uri=\"/ping\".*");
     }
 
+    public static class TestConfiguration extends Configuration implements MicrometerBundleConfiguration {
+
+        @JsonProperty("prometheus")
+        private PrometheusConfiguration prometheusConfiguration = new PrometheusConfiguration();
+
+        @Override
+        public PrometheusConfiguration getPrometheusConfiguration() {
+            return prometheusConfiguration;
+        }
+    }
+
 
     @Path("/")
-    public static class TestApp extends Application<Configuration> {
+    public static class TestApp extends Application<TestConfiguration> {
 
         @Path("/ping")
         public static class PingResource {
@@ -166,12 +180,12 @@ public class MicrometerBundleTest {
         }
 
         @Override
-        public void initialize(Bootstrap<Configuration> bootstrap){
+        public void initialize(Bootstrap<TestConfiguration> bootstrap){
             bootstrap.addBundle(new MicrometerBundle());
         }
 
         @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
+        public void run(TestConfiguration configuration, Environment environment) throws Exception {
             environment.jersey().register(new PingResource());
 
             FilterRegistration.Dynamic prometheusFilter = environment.servlets().addFilter("MicrometerHttpFilter", new MicrometerHttpFilter());

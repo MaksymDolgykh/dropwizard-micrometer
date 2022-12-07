@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
 import org.assertj.core.api.Assertions;
@@ -39,7 +40,7 @@ public class MicrometerJdbiTimingCollectorTest {
         return socket.getLocalPort();
     }
 
-    public static final DropwizardAppExtension EXT = new DropwizardAppExtension(TestApp.class,
+    public static final DropwizardAppExtension<TestConfiguration> EXT = new DropwizardAppExtension<TestConfiguration>(TestApp.class,
             ResourceHelpers.resourceFilePath("testConfig.yaml"),
             ConfigOverride.config("server.applicationConnectors[0].port", String.valueOf(getFreePort())),
             ConfigOverride.config("server.adminConnectors[0].port", String.valueOf(getFreePort())));
@@ -48,10 +49,13 @@ public class MicrometerJdbiTimingCollectorTest {
     int appPort = EXT.getLocalPort();
     Client client = EXT.client();
 
+    PrometheusConfiguration prometheusConfiguration = EXT.getConfiguration().getPrometheusConfiguration();
+
+
     String ping = client.target("http://localhost:" + appPort + "/ping")
             .request().get(String.class);
 
-    String scrape = client.target("http://localhost:"+ adminPort +"/prometheus")
+    String scrape = client.target("http://localhost:"+ adminPort + prometheusConfiguration.getEndpoint())
             .request().get(String.class);
     
 
@@ -82,10 +86,20 @@ public class MicrometerJdbiTimingCollectorTest {
                 .isNotNull()
                 .contains("jdbi_requests_seconds");
     }
-    
+
+    public static class TestConfiguration extends Configuration implements MicrometerBundleConfiguration {
+
+        @JsonProperty("prometheus")
+        private PrometheusConfiguration prometheus = new PrometheusConfiguration();
+
+        @Override
+        public PrometheusConfiguration getPrometheusConfiguration() {
+            return prometheus;
+        }
+    }
 
     @Path("/")
-    public static class TestApp extends Application<Configuration> {
+    public static class TestApp extends Application<TestConfiguration> {
 
         @Path("/ping")
         public static class PingResource {
@@ -96,12 +110,12 @@ public class MicrometerJdbiTimingCollectorTest {
         }
 
         @Override
-        public void initialize(Bootstrap<Configuration> bootstrap){
+        public void initialize(Bootstrap<TestConfiguration> bootstrap){
             bootstrap.addBundle(new MicrometerBundle());
         }
 
         @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
+        public void run(TestConfiguration configuration, Environment environment) throws Exception {
             Jdbi jdbi = Jdbi.create("jdbc:h2:mem:test");
             jdbi.setTimingCollector(new MicrometerJdbiTimingCollector());
             environment.jersey().register(new PingResource());

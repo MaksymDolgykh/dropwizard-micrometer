@@ -1,6 +1,5 @@
 package io.github.maksymdolgykh.dropwizard.micrometer;
 
-import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -21,10 +20,8 @@ import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.Histogram;
 
-public class MicrometerBundle implements ConfiguredBundle<Configuration> {
+public class MicrometerBundle<T extends MicrometerBundleConfiguration> implements ConfiguredBundle<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MicrometerBundle.class);
-
-    private static final String scrapePath = "/prometheus";
 
     private static final double[] httpLatencyBuckets = new double[]
     {.001, .002, .003, .004, .005, .007, .01, .015, .025, .05, .075,
@@ -45,8 +42,9 @@ public class MicrometerBundle implements ConfiguredBundle<Configuration> {
             .register(prometheusRegistry.getPrometheusRegistry());
 
     @Override
-    public void run(Configuration configuration, Environment environment) throws Exception {
-        String endpoint = scrapePath;
+    public void run(T bundleConfiguration, Environment environment) throws Exception {
+        PrometheusConfiguration prometheusConfiguration = bundleConfiguration.getPrometheusConfiguration();
+        String endpoint = prometheusConfiguration.getEndpoint();
 
         // add system and jvm metrics
         new ClassLoaderMetrics().bindTo(prometheusRegistry);

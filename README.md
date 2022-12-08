@@ -73,6 +73,27 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
 }
 ```
 
+You will also need to make your `ExampleConfiguration` class implement `MicrometerBundleConfiguration` 
+in order to provide the bundle with the configuration:
+```java
+public class ExampleConfiguration extends Configuration implements MicrometerBundleConfiguration {
+    @JsonProperty("prometheus")
+    private PrometheusConfiguration prometheusConfiguration = new PrometheusConfiguration();
+
+    @Override
+    public PrometheusConfiguration getPrometheusConfiguration() {
+        return prometheusConfiguration;
+    }
+    //...
+    //...
+}
+```
+Assuming, the above example, configuration element is `prometheus`, so you can use configuration block like this in a config file:
+```yaml
+prometheus:
+  endpoint: "/prometheus"
+```
+
 This will expose `/prometheus` endpoint in admin connector, by default admin connector is exposed at port `8081` 
 in dropwizard apps.
 

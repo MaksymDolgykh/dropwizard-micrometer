@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v2.0.9...v3.0.0) (2022-12-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* application Configuration class has to implement MicrometerBundleConfiguration
+
+### Features
+
+* make bundle configurable ([cbb1f93](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/cbb1f93f39a3edc3724d25af23093f0715215440)), closes [#19](https://github.com/MaksymDolgykh/dropwizard-micrometer/issues/19)
+
+
+### Documentation
+
+* update doc to include configuration step required to setup bundle ([21380c0](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/21380c04e518263d2c3918d7c84b47ce3971ccad))
+
+
+### Miscellaneous Chores
+
+* **master:** release 2.0.10-SNAPSHOT ([ae931d6](https://github.com/MaksymDolgykh/dropwizard-micrometer/commit/ae931d65d3ec110b2bda47f6c2c023cf57d26ae4))
+
 ## [2.0.9](https://github.com/MaksymDolgykh/dropwizard-micrometer/compare/v2.0.8...v2.0.9) (2022-11-28)
 
 

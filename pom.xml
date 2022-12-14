@@ -4,7 +4,7 @@
 
     <groupId>io.github.maksymdolgykh.dropwizard</groupId>
     <artifactId>dropwizard-micrometer</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
